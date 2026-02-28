@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>骏尹给小雅的哦！</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffe4e1; /* Soft pink background */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
 
+    .container {
+      text-align: center;
+      z-index: 10; /* Keep text above hearts */
+    }
+
+    .btn-group {
+      margin-top: 20px;
+      height: 50px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    #yesBtn {
+      background-color: #4CAF50;
+      color: white;
+      margin-right: 10px;
+    }
+
+    #noBtn {
+      background-color: #f44336;
+      color: white;
+      position: absolute;
+      white-space: nowrap;
+    }
+
+    /* Heart Animation Styles */
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+      animation: explode 1.8s forwards ease-out;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mainContent" class="container">
+    <h1>你爱我吗? 💖</h1>
+    <div class="btn-group">
+      <button id="yesBtn">爱</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
+
+  <div id="successContent" class="container hidden">
+    <h1>我也爱你! 💖💖💖</h1>
+    <h3>爱我是肯定的哟！！！</h3>
+  </div>
+
+
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const mainContent = document.getElementById("mainContent");
+    const successContent = document.getElementById("successContent");
+    const bgm = document.getElementById("bgm");
+
+    const phrases = ["不允许", "不可以!", "爱你!", "只能爱我", "你是我的!", "主人！！"];
+
+    // Set initial position for No button so it's not on top of Yes
+    noBtn.style.left = (window.innerWidth / 2 + 50) + "px";
+
+    noBtn.addEventListener("mouseover", () => {
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+      noBtn.innerText = randomPhrase;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      mainContent.classList.add("hidden");
+      noBtn.classList.add("hidden");
+      successContent.classList.remove("hidden");
+      document.body.style.backgroundColor = "#ffc0cb";
+
+
+      for (let i = 0; i < 120; i++) {
+        setTimeout(createHeart, i * 40);
+      }
+    });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤️';
+      
+      // Start from center
+      heart.style.left = '50%';
+      heart.style.top = '50%';
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = 200 + Math.random() * 400;
+      const x = Math.cos(angle) * velocity + 'px';
+      const y = Math.sin(angle) * velocity + 'px';
+
+      heart.style.setProperty('--x', x);
+      heart.style.setProperty('--y', y);
+      
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1800);
+    }
+  </script>
+
+</body>
+</html>
